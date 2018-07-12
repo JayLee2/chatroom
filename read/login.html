@@ -88,7 +88,7 @@
             height: 0;
         }
     </style>
-    <script src="http://localhost:2222/socket.io/socket.io.js"></script>
+    <script src="http://211.159.150.83:2222/socket.io/socket.io.js"></script>
     <script src="./jquery-3.2.1.min.js"></script>
 </head>
 <body>
@@ -113,7 +113,7 @@
 </html>
 <script>
     let username=''
-    let sock=io.connect('ws://localhost:2222');
+    let sock=io.connect('ws://211.159.150.83:2222');
     sock.on('login_ret',function (code,user) {
         if(code){
             alert('登陆失败'+msg);
@@ -128,19 +128,17 @@
         let pass=$('#pass').val();
         sock.emit('login',user,pass);
     });
-    sock.on('send_ret',(code,msg)=>{
+    sock.on('send_ret',function(code,msg){
         if(code){
             alert(msg);
         }else{
-            $(`<div class="talks right">${username}:<br>${msg}</div>
-        <div class="clear"></div>`).appendTo('.talk_box');
+            $('<div class="talks right">'+username+':<br>'+msg+'</div><div class="clear"></div>').appendTo('.talk_box');
         }
         $('.words').val('');
     });
-    sock.on('msg',(user,word)=>{
+    sock.on('msg',function(user,word){
 
-            $(`<div class="talks left">${user}:<br>${word}</div>
-        <div class="clear"></div>`).appendTo('.talk_box');
+            $('<div class="talks left">'+user+':<br>'+word+'</div><div class="clear"></div>').appendTo('.talk_box');
 
     });
     $('.send').click(function () {

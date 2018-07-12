@@ -44,7 +44,7 @@
             text-align: center;
         }
     </style>
-    <script src="http://localhost:2222/socket.io/socket.io.js"></script>
+    <script src="http://211.159.150.83:2222/socket.io/socket.io.js"></script>
     <script src="./jquery-3.2.1.min.js"></script>
 </head>
 <body>
@@ -59,7 +59,7 @@
 </body>
 </html>
 <script>
-    let sock=io.connect('ws://localhost:2222');
+    let sock=io.connect('ws://211.159.150.83:2222');
     sock.on('reg_ret',function (code,msg) {
         if(code){
             alert('注册失败'+msg);
