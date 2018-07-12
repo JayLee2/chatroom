@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://localhost:2222/socket.io/socket.io.js"></script>
+    <script src="./jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<h1>hello <span class="username"></span></h1>
+</body>
+</html>
+<script>
+    let sock=io.connect('ws://localhost:2222');
+    sock.emit('chat');
+    sock.on('chat_ret',function (user) {
+        $('.username').html(user)
+    })
+</script>

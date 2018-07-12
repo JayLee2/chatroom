@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <style>
+        div.box{
+            margin-top: 100px;
+        }
+        input{
+            display: block;
+            margin: auto;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #1B748A;
+            height: 30px;
+            border-radius: 3px;
+            text-indent: 5px;
+        }
+        button{
+            width: 200px;
+            height: 30px;
+            background: #1B748A;
+            border: none;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+            display: block;
+            margin: 20px auto;
+        }
+        a{
+            max-width: 400px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #a4da89;
+            display: block;
+            margin: auto;
+            text-align: right;
+        }
+        a:hover{
+            text-decoration:underline;
+        }
+        h1{
+            text-align: center;
+        }
+    </style>
+    <script src="http://localhost:2222/socket.io/socket.io.js"></script>
+    <script src="./jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<div class="box">
+    <h1>注册</h1>
+    <input type="text" placeholder="请输入账号" id="user"><br>
+    <input type="password" placeholder="请输入密码" id="pass"><br>
+    <a href="login.html">返回登陆</a>
+    <button>注册</button>
+</div>
+
+</body>
+</html>
+<script>
+    let sock=io.connect('ws://localhost:2222');
+    sock.on('reg_ret',function (code,msg) {
+        if(code){
+            alert('注册失败'+msg);
+        }else{
+            alert('注册成功');
+        }
+    })
+    $('button').click(function () {
+        var user=$('#user').val();
+        var pass=$('#pass').val();
+        sock.emit('reg',user,pass);
+    })
+</script>

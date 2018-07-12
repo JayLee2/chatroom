@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        div.box{
+            margin-top: 100px;
+        }
+        input{
+            display: block;
+            margin: auto;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #1B748A;
+            height: 30px;
+            border-radius: 3px;
+            text-indent: 5px;
+        }
+        button{
+            width: 200px;
+            height: 30px;
+            background: #1B748A;
+            border: none;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+            display: block;
+            margin: 20px auto;
+        }
+        a{
+            max-width: 400px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #a4da89;
+            display: block;
+            margin: auto;
+            text-align: right;
+        }
+        a:hover{
+            text-decoration:underline;
+        }
+        h1{
+            text-align: center;
+        }
+        .fix{
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: auto;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+        }
+        .talks{
+            width: 250px;
+            line-height: 30px;
+            padding: 10px;
+            background: url("talk.png") no-repeat;
+            background-size: 100% 100%;
+            word-break:break-all;
+            word-wrap: break-word;
+            margin-top: 30px;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .main{
+            max-width: 750px;
+            margin: auto;
+        }
+        h1{
+            font-size: 35px;
+            color: #0BB1DB;
+            font-family: '苹方 中等';
+        }
+        .clear{
+            clear: both;
+            height: 0;
+        }
+    </style>
+    <script src="http://localhost:2222/socket.io/socket.io.js"></script>
+    <script src="./jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<div class="box">
+    <h1>登陆</h1>
+    <input type="text" placeholder="请输入账号" id="user"><br>
+    <input type="password" placeholder="请输入密码" id="pass"><br>
+    <a href="reg.html">返回注册</a>
+    <button class="login">登陆</button>
+</div>
+<div class="fix">
+    <div class="main">
+        <h1>LWJ聊天室</h1>
+        <input type="text" class="words"><button class="send">发送</button>
+        <div class="talk_box">
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+<script>
+    let username=''
+    let sock=io.connect('ws://localhost:2222');
+    sock.on('login_ret',function (code,user) {
+        if(code){
+            alert('登陆失败'+msg);
+        }else{
+            alert('登陆成功');
+            username=user;
+            $('.fix').show(600);
+        }
+    });
+    $('.login').click(function () {
+        let user=$('#user').val();
+        let pass=$('#pass').val();
+        sock.emit('login',user,pass);
+    });
+    sock.on('send_ret',(code,msg)=>{
+        if(code){
+            alert(msg);
+        }else{
+            $(`<div class="talks right">${username}:<br>${msg}</div>
+        <div class="clear"></div>`).appendTo('.talk_box');
+        }
+        $('.words').val('');
+    });
+    sock.on('msg',(user,word)=>{
+
+            $(`<div class="talks left">${user}:<br>${word}</div>
+        <div class="clear"></div>`).appendTo('.talk_box');
+
+    });
+    $('.send').click(function () {
+        var word=$('.words').val();
+        sock.emit('send',word)
+    })
+</script>
